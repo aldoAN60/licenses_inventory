@@ -13,14 +13,14 @@ h1{
 .text_licenses_select{
     color: #8B1A10;
     font-size: 1.2em;
-    font-weight: 600;
+    font-weight: 500;
     position: relative;
     top: 3px;
 }
 .text_licenses_unselect{
     color: #9CA3A7;
     font-size: 1.2em;
-    font-weight: 600;
+    font-weight: 500;
     position: relative;
     top: 3px;
 }
@@ -34,7 +34,7 @@ h1{
     padding-bottom: 0.18em;
     color: #ffff;
     font-size: 0.8em;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .quantity_radius_unselect{
@@ -47,7 +47,7 @@ h1{
     padding-bottom: 0.18em;
     color: #5C6468;
     font-size: 0.8em;
-    font-weight: 600;
+    font-weight: 500;
 }
 .selected{
     fill:#F7F7F7
@@ -72,14 +72,13 @@ background: #DB0000;
 color: #FFF;
 text-align: center;
 font-style: normal;
-font-weight: 700;
+font-weight: 600;
 line-height: normal;
 }
 
-.table-conteiner{
-    overflow:scroll;
-    height:200px;
-    width:500px;
+#table-conteiner{
+    width: 100%;
+    overflow: scroll;
 }
 
     

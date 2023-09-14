@@ -1,0 +1,85 @@
+.container{
+    border-radius: 0px 15px 0px 0px;
+    background: #F7F7F7;
+}
+
+h1{
+    color: #C60021;
+    text-align: center;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+.text_licenses_select{
+    color: #8B1A10;
+    font-size: 1.2em;
+    font-weight: 600;
+    position: relative;
+    top: 3px;
+}
+.text_licenses_unselect{
+    color: #9CA3A7;
+    font-size: 1.2em;
+    font-weight: 600;
+    position: relative;
+    top: 3px;
+}
+.quantity_radius_select{
+    background-color: #8B1A10;
+    border: 3px solid #8B1A10;
+    border-radius: 1.563em;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    padding-top: 0.18em;
+    padding-bottom: 0.18em;
+    color: #ffff;
+    font-size: 0.8em;
+    font-weight: 600;
+}
+
+.quantity_radius_unselect{
+    background-color: #9CA3A7;
+    border: 3px solid #9CA3A7;
+    border-radius: 1.563em;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    padding-top: 0.18em;
+    padding-bottom: 0.18em;
+    color: #5C6468;
+    font-size: 0.8em;
+    font-weight: 600;
+}
+.selected{
+    fill:#F7F7F7
+}
+.unselected{
+    fill: #D4D7DC;
+stroke-width: 1px;
+stroke: rgba(173, 185, 193, 0.50);
+}
+.selected-icon{
+    fill:#8B1A10;
+}
+.unselected-icon{
+    fill: #9CA3A7;
+}
+
+.btn-add-registry{
+border-radius: 40px;
+background: #DB0000;
+}
+.text-add-registry{
+color: #FFF;
+text-align: center;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+
+.table-conteiner{
+    overflow:scroll;
+    height:200px;
+    width:500px;
+}
+
+    

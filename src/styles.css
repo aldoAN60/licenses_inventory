@@ -1,6 +1,7 @@
 body{
-background: linear-gradient(61deg, rgba(204,204,204,1) 0%, rgba(239,239,239,1) 100%);
+/* background: linear-gradient(61deg, rgba(204,204,204,1) 0%, rgba(239,239,239,1) 100%); */
 font-family: Inter;
+background-color: #3f3f3f;
 }
 
 

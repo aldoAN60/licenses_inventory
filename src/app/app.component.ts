@@ -10,7 +10,7 @@ import { of } from 'rxjs';
 })
 
 export class AppComponent implements OnInit {
-
+  panelOpenState = false;
 
   title = 'licenses_inventory';
 
@@ -29,6 +29,7 @@ constructor( private http: HttpClient ){
     this.label1 = true;
     this.label2 = false;
     this.label3 = false;
+    
     this.getRegistryCounts();
   }
 
@@ -51,7 +52,7 @@ constructor( private http: HttpClient ){
     }
   }
     getRegistryCounts(){
-      const url = 'http://127.0.0.1:8000/api/total-Licenses';
+      const url = 'http://10.23.104.56:8000/api/total-Licenses';
       this.http.get<any>(url).pipe(
         tap((data)=> {
           this.registryCounts = data;

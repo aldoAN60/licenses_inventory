@@ -1,5 +1,11 @@
 
+<button  mat-raised-button color="primary" class=" mb-2 mt-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+  advance filter
+</button>
 
+  <mat-card class="collapse" id="collapseExample">
+    <mat-card-content>
+    
 <form class="example-form">
   
   <mat-form-field class="example-full-width">
@@ -8,84 +14,28 @@
     placeholder="Filter by Employee Number" 
     aria-label="Employee Number"
     matInput
-    [formControl]="employee_number">
-
+    [formControl]="filterControl">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option  of filteredOptions | async" [value]="option ">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
 
-  <mat-form-field class="example-full-width">
-    <mat-label>employee_name</mat-label>
-    <input type="text"
-    placeholder="Filter by employee_name" 
-    aria-label="employee name"
-    matInput
-    [formControl]="employee_name">
-  </mat-form-field>
+  <!-- <mat-form-field>
+    <mat-label>Favorite food</mat-label>
+    <mat-select>
+      <mat-option *ngFor="let licencia of licencias" [value]="licencia.value">
+        {{licencia.viewValue}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field> -->
 
-  <mat-form-field class="example-full-width">
-    <mat-label>CC number</mat-label>
-    <input type="text"
-    placeholder="Filter by CC number" 
-    aria-label="CC Numberr"
-    matInput
-    [formControl]="CC_number">
-  </mat-form-field>
-
-  <mat-form-field class="example-full-width">
-    <mat-label>CC Name</mat-label>
-    <input type="text"
-    placeholder="Filter by CC Name" 
-    aria-label="CC Name"
-    matInput
-    [formControl]="CC_name">
-  </mat-form-field>
-
-  <mat-form-field class="example-full-width">
-    <mat-label>License</mat-label>
-    <input type="text"
-    placeholder="Filter by License" 
-    aria-label="license"
-    matInput
-    [formControl]="license">
-  </mat-form-field>
-
-  <mat-form-field class="example-full-width">
-    <mat-label>Sub Area</mat-label>
-    <input type="text"
-    placeholder="Filter by Sub Area" 
-    aria-label="Sub Area"
-    matInput
-    [formControl]="sub_area_name">
-  </mat-form-field>
-  
-  <mat-form-field class="example-full-width">
-    <mat-label>Sub Area Manager</mat-label>
-    <input type="text"
-    placeholder="Filter by Sub Area Manager" 
-    aria-label="Sub Area Manager"
-    matInput
-    [formControl]="sub_area_manager">
-  </mat-form-field>
-  
-  <mat-form-field class="example-full-width">
-    <mat-label>Area</mat-label>
-    <input type="text"
-    placeholder="Filter by Area" 
-    aria-label="Area"
-    matInput
-    [formControl]="area">
-  </mat-form-field>
-
-  <mat-form-field class="example-full-width">
-    <mat-label>Area Manager</mat-label>
-    <input type="text"
-    placeholder="Filter by Area Manager" 
-    aria-label="Area Manager"
-    matInput
-    [formControl]="area_manager">
-  </mat-form-field>
 </form> 
+</mat-card-content>
+  </mat-card>
 
-<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 mt-2">
 
   <!-- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
@@ -104,7 +54,7 @@
   <ng-container matColumnDef="employee_name">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Employee Name </th>
     <td mat-cell *matCellDef="let element">
-      <span mat-raised-button matTooltip="employee number: {{element.employee_number}}" aria-label="Button that displays a tooltip when focused or hovered over">
+      <span mat-raised-button matTooltip="employee number: {{element.employee_number}}">
         {{element.employee_name}}
       </span>  </td>
   </ng-container>
@@ -122,17 +72,33 @@
 
   <ng-container matColumnDef="license_status">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> License status </th>
-    <td mat-cell *matCellDef="let element"> {{element.license_status}} </td>
+    <td mat-cell *matCellDef="let element"> 
+      <span class="{{ element.license_status === 'active' ? 'active':
+        element.license_status === 'expired' ? 'expired' : null}}">
+        {{element.license_status}}
+      </span>   
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="license_expiration">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> License EXP date </th>
-    <td mat-cell *matCellDef="let element"> {{element.license_expiration}} </td>
+    <td mat-cell *matCellDef="let element"> 
+      <span class="{{ element.license_expiration === '2000-01-01 00:00:00.000' ? 'unknown' :
+      element.license_expiration == '9999-12-31 00:00:00.000' ? 'lifeTime' : 
+      'add-date' }}
+    ">
+        {{ element.license_expiration === '2000-01-01 00:00:00.000' ? 'Unknown' :
+        element.license_expiration == '9999-12-31 00:00:00.000' ? 'Lifetime' : 
+        element.license_expiration | date: 'dd/MM/yyyy' }}
+      
+      </span>
+      <!-- {{ element.license_expiration | date: 'dd/MM/yyyy' }} -->
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="notes">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Notes </th>
-    <td mat-cell *matCellDef="let element"> {{element.notes}} </td>
+    <td mat-cell *matCellDef="let element"> {{element.notes }} </td>
   </ng-container>
 
   <ng-container matColumnDef="CC_name">

@@ -9,11 +9,14 @@ import { of } from 'rxjs';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
-import {NgFor, AsyncPipe} from '@angular/common';
+import {NgFor, AsyncPipe, CommonModule} from '@angular/common';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+
+
 
 
 export interface PeriodicElement {
@@ -30,7 +33,7 @@ export interface PeriodicElement {
   CC_name: string;
   license: string;
   license_status: string;
-  license_expiration: string;
+  license_expiration: Date;
   notes: string ;
 }
 
@@ -51,7 +54,10 @@ export interface PeriodicElement {
     MatInputModule,
     MatFormFieldModule,
     AsyncPipe,
-    NgFor]
+    NgFor,
+    MatCardModule,
+    CommonModule
+  ]
 })
 
 export class RegistryTableComponent implements OnInit {
@@ -59,15 +65,10 @@ export class RegistryTableComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
   myControl = new FormControl('');
-  employee_number = new FormControl('');
-  employee_name = new FormControl('');
-  CC_number = new FormControl('');
-  CC_name = new FormControl('');
-  license = new FormControl('');
-  sub_area_name = new FormControl('');
-  sub_area_manager = new FormControl('');
-  area = new FormControl('');
-  area_manager = new FormControl('');
+  filterControl = new FormControl('');
+  uniqueLicenses:any;
+  
+  
   
   
   filteredOptions!: Observable<string[]>;
@@ -102,31 +103,7 @@ export class RegistryTableComponent implements OnInit {
     );
   
     // Suscríbete a los cambios en el filtro y aplícalo a la tabla
-    this.employee_number.valueChanges.subscribe(filterValue => {
-      this.dataSource.filter = filterValue!.trim().toLowerCase();
-    });
-    this.employee_name.valueChanges.subscribe(filterValue => {
-      this.dataSource.filter = filterValue!.trim().toLowerCase();
-    });
-    this.CC_number.valueChanges.subscribe(filterValue => {
-      this.dataSource.filter = filterValue!.trim().toLowerCase();
-    });
-    this.CC_name.valueChanges.subscribe(filterValue => {
-      this.dataSource.filter = filterValue!.trim().toLowerCase();
-    });
-    this.license.valueChanges.subscribe(filterValue => {
-      this.dataSource.filter = filterValue!.trim().toLowerCase();
-    });
-    this.sub_area_name.valueChanges.subscribe(filterValue => {
-      this.dataSource.filter = filterValue!.trim().toLowerCase();
-    });
-    this.sub_area_manager.valueChanges.subscribe(filterValue => {
-      this.dataSource.filter = filterValue!.trim().toLowerCase();
-    });
-    this.area.valueChanges.subscribe(filterValue => {
-      this.dataSource.filter = filterValue!.trim().toLowerCase();
-    });
-    this.area_manager.valueChanges.subscribe(filterValue => {
+    this.filterControl.valueChanges.subscribe(filterValue => {
       this.dataSource.filter = filterValue!.trim().toLowerCase();
     });
     
@@ -140,15 +117,7 @@ export class RegistryTableComponent implements OnInit {
     return this.options.filter(option =>
       option.toLowerCase().includes(filterValue) ||
       this.dataSource.data.filter(element =>
-        element.employee_number.toLowerCase().includes(filterValue) ||
-        element.employee_name.toLowerCase().includes(filterValue)||
-        element.CC_number.toLowerCase().includes(filterValue)||
-        element.CC_name.toLowerCase().includes(filterValue)||
-        element.license.toLowerCase().includes(filterValue)||
-        element.sub_area_name.toLowerCase().includes(filterValue)||
-        element.sub_area_manager.toLowerCase().includes(filterValue)||
-        element.area.toLowerCase().includes(filterValue)||
-        element.area_manager.toLowerCase().includes(filterValue)
+        element.license.toLowerCase().includes(filterValue)
       )
     );
   }
@@ -157,7 +126,8 @@ export class RegistryTableComponent implements OnInit {
   options: string[] = [];
 
   getRegistry() {
-    const url = 'http://127.0.0.1:8000/api/registry';
+    const url = 'http://10.23.104.56:8000/api/registry';
+    
     this.http
       .get<PeriodicElement[]>(url)
       .pipe(
@@ -165,6 +135,11 @@ export class RegistryTableComponent implements OnInit {
           this.dataSource.data = data; // Asigna los datos al dataSource
           this.dataSource.paginator = this.paginator; // Configura el paginador
           this.dataSource.sort = this.sort;
+          const license: string[] = data.map((element) => {
+            return element.license;
+          });
+          this.uniqueLicenses = [... new Set(license)];
+          console.log(this.uniqueLicenses);
         }),
         catchError((error: any) => {
           console.error(error);

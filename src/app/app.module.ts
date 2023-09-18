@@ -6,6 +6,9 @@ import { AppComponent } from './app.component';
 import { FilterInputComponent } from './filter-input/filter-input.component';
 import { RegistryTableComponent } from './registry-table/registry-table.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
+
 
 @NgModule({
     declarations: [
@@ -21,7 +24,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         AppRoutingModule,
         HttpClientModule,
         BrowserAnimationsModule,
-        RegistryTableComponent
+        RegistryTableComponent,
+        MatSlideToggleModule,
+        
     ]
 })
 export class AppModule { }

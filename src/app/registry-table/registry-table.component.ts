@@ -135,7 +135,7 @@ export class RegistryTableComponent implements OnInit {
           });
           license = [... new Set(license)]
           this.options = license.sort();
-          console.log(this.options);
+          
         }),
         catchError((error: any) => {
           console.error(error);

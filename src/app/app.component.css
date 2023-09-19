@@ -75,7 +75,12 @@ font-style: normal;
 font-weight: 600;
 line-height: normal;
 }
+@media (max-width: 768px){
 
+#table-conteiner{
+overflow: scroll;
+    }
+}
 
 
     

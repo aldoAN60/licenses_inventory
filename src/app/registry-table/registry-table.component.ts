@@ -121,7 +121,7 @@ export class RegistryTableComponent implements OnInit {
   }
 
   getRegistry() {
-    const url = 'http://10.23.104.56:8000/api/registry';
+    const url = 'http://localhost:8000/api/registry';
     
     this.http
       .get<PeriodicElement[]>(url)

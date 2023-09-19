@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,7 +12,7 @@ import { of } from 'rxjs';
 
 export class AppComponent implements OnInit {
   panelOpenState = false;
-
+  
   title = 'licenses_inventory';
 
   label1:boolean = true;
@@ -51,8 +52,12 @@ constructor( private http: HttpClient ){
       this.label3 = true;
     }
   }
+  
+  
+  
     getRegistryCounts(){
-      const url = 'http://10.23.104.56:8000/api/total-Licenses';
+      
+      const url = 'http://localhost:8000/api/total-Licenses';
       this.http.get<any>(url).pipe(
         tap((data)=> {
           this.registryCounts = data;
@@ -63,6 +68,8 @@ constructor( private http: HttpClient ){
           return of(null);
         })
       ).subscribe();
-
+        
     }
+    
+    
 }

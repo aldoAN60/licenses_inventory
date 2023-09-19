@@ -64,10 +64,10 @@ export class RegistryTableComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  myControl = new FormControl('');
+  licenseControl = new FormControl('');
   filterControl = new FormControl('');
   uniqueLicenses:any;
-  
+  options: string[] = [];
   
   
   
@@ -97,14 +97,17 @@ export class RegistryTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRegistry();
-    this.filteredOptions = this.myControl.valueChanges.pipe(
+    this.filteredOptions = this.licenseControl.valueChanges.pipe(
       startWith(''),
-      map(value => this._filter(value || ''))
+      map(value => this._filter(value || '')),
     );
   
     // Suscríbete a los cambios en el filtro y aplícalo a la tabla
     this.filterControl.valueChanges.subscribe(filterValue => {
       this.dataSource.filter = filterValue!.trim().toLowerCase();
+    });
+    this.licenseControl.valueChanges.subscribe(filterValue => {
+      this.dataSource.filter = filterValue!.trim().toLocaleLowerCase();
     });
     
   }
@@ -113,17 +116,9 @@ export class RegistryTableComponent implements OnInit {
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-  
-    return this.options.filter(option =>
-      option.toLowerCase().includes(filterValue) ||
-      this.dataSource.data.filter(element =>
-        element.license.toLowerCase().includes(filterValue)
-      )
-    );
-  }
-  
 
-  options: string[] = [];
+    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+  }
 
   getRegistry() {
     const url = 'http://10.23.104.56:8000/api/registry';
@@ -135,11 +130,12 @@ export class RegistryTableComponent implements OnInit {
           this.dataSource.data = data; // Asigna los datos al dataSource
           this.dataSource.paginator = this.paginator; // Configura el paginador
           this.dataSource.sort = this.sort;
-          const license: string[] = data.map((element) => {
+          let license: string[] = data.map((element) => {
             return element.license;
           });
-          this.uniqueLicenses = [... new Set(license)];
-          console.log(this.uniqueLicenses);
+          license = [... new Set(license)]
+          this.options = license.sort();
+          console.log(this.options);
         }),
         catchError((error: any) => {
           console.error(error);

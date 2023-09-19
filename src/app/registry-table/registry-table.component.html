@@ -8,15 +8,26 @@
     
 <form class="example-form">
   
-  <mat-form-field class="example-full-width">
+  <!-- <mat-form-field class="example-full-width">
     <mat-label>Employee Number</mat-label>
     <input type="text"
     placeholder="Filter by Employee Number" 
     aria-label="Employee Number"
     matInput
     [formControl]="filterControl">
+    
+  </mat-form-field> -->
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Number</mat-label>
+    <input type="text"
+           placeholder="Pick one"
+           aria-label="Number"
+           matInput
+           [formControl]="licenseControl"
+           [matAutocomplete]="auto">
     <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let option  of filteredOptions | async" [value]="option ">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
         {{option}}
       </mat-option>
     </mat-autocomplete>

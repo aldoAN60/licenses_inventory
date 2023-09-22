@@ -5,7 +5,7 @@
   <div class="container mt-4 position-relative animate__animated animate__fadeInUp">
     <div style="position: relative; top: -60px; left: -23px;">
       <div class="position-absolute">
-        <a href="#" role="button" id="label1" (click)="changeLabel('label1')">
+        
         <svg [ngClass]="label1 ? 'selected': 'unselected' " xmlns="http://www.w3.org/2000/svg" width="300" height="60" viewBox="0 0 241 52" >
           <path d="M0 20C0 8.9543 8.95431 0 20 0H203.429C206.903 0 210.128 1.80252 211.947 4.76128L241 52H0V20Z" />
           </svg>
@@ -20,7 +20,7 @@
           <span [ngClass]="label1 ? 'text_licenses_select':'text_licenses_unselect'" class=" ms-1 me-1"> total Licenses </span>
           <span [ngClass]="label1 ? 'quantity_radius_select':'quantity_radius_unselect'" >{{registryCounts?.totalRegistry}}</span>
         </p>
-      </a>
+      
       </div>
     </div>
     <!-- <div class="row">

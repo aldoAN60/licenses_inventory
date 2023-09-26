@@ -15,6 +15,12 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
+import { ExcelComponent } from '../excel/excel.component';
+import { environment as test } from 'src/enviroments/enviroment';
+import { environment as product } from 'src/enviroments/enviroment.prod';
+
+const urlTest = test.apiUrl;
+const urlprod = product.apiUrl;
 
 
 
@@ -56,7 +62,8 @@ export interface PeriodicElement {
     AsyncPipe,
     NgFor,
     MatCardModule,
-    CommonModule
+    CommonModule,
+    ExcelComponent
   ]
 })
 
@@ -121,7 +128,7 @@ export class RegistryTableComponent implements OnInit {
   }
 
   getRegistry() {
-    const url = 'http://localhost:8000/api/registry';
+    const url = urlTest+'/registry';
     
     this.http
       .get<PeriodicElement[]>(url)

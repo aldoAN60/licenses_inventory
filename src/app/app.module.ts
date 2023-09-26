@@ -7,6 +7,8 @@ import { FilterInputComponent } from './filter-input/filter-input.component';
 import { RegistryTableComponent } from './registry-table/registry-table.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ExcelComponent } from './excel/excel.component';
+
 
 
 
@@ -15,6 +17,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     declarations: [
         AppComponent,
         FilterInputComponent,
+        
        
         
         

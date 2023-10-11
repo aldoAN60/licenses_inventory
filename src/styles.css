@@ -1,8 +1,6 @@
+
 body{
 background: linear-gradient(61deg, rgba(204,204,204,1) 0%, rgba(239,239,239,1) 100%);
-font-family: Inter;
+font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}

@@ -17,10 +17,9 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import { ExcelComponent } from '../excel/excel.component';
 import { environment as test } from 'src/enviroments/enviroment';
-import { environment as product } from 'src/enviroments/enviroment.prod';
+import { MatIconModule } from '@angular/material/icon';
 
 const urlTest = test.apiUrl;
-const urlprod = product.apiUrl;
 
 
 
@@ -63,7 +62,8 @@ export interface PeriodicElement {
     NgFor,
     MatCardModule,
     CommonModule,
-    ExcelComponent
+    ExcelComponent,
+    MatIconModule
   ]
 })
 

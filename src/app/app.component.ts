@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { environment as test } from 'src/enviroments/enviroment';
-import { environment as product } from 'src/enviroments/enviroment.prod';
+
 
 const urlTest = test.apiUrl;
-const urlprod = product.apiUrl;
+
 
 
 @Component({

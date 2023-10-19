@@ -7,7 +7,9 @@ import { FilterInputComponent } from './filter-input/filter-input.component';
 import { RegistryTableComponent } from './registry-table/registry-table.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ExcelComponent } from './excel/excel.component';
+
+import { MatIconModule } from '@angular/material/icon';
+import { LoginComponent } from './login/login.component';
 
 
 
@@ -17,6 +19,7 @@ import { ExcelComponent } from './excel/excel.component';
     declarations: [
         AppComponent,
         FilterInputComponent,
+        LoginComponent,
         
        
         
@@ -31,7 +34,7 @@ import { ExcelComponent } from './excel/excel.component';
         BrowserAnimationsModule,
         RegistryTableComponent,
         MatSlideToggleModule,
-        
+        MatIconModule
     ]
 })
 export class AppModule { }

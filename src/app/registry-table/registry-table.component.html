@@ -5,7 +5,7 @@
     </button>
   </div>
   <div class="col">
-    <app-excel ></app-excel>
+    <app-excel ></app-excel> 
   </div>
   
 </div>
@@ -29,11 +29,11 @@
   <mat-form-field class="example-full-width">
     <mat-label>Filter license</mat-label>
     <input type="text"
-           placeholder="write a license"
-           aria-label="filter license"
-           matInput
-           [formControl]="licenseControl"
-           [matAutocomplete]="auto">
+      placeholder="write a license"
+      aria-label="filter license"
+      matInput
+      [formControl]="licenseControl"
+      [matAutocomplete]="auto">
     <mat-autocomplete #auto="matAutocomplete">
       <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
         {{option}}
@@ -49,19 +49,12 @@
 
 <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 mt-2 table">
 
-  <!-- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
-
-  <!-- No. Column -->
   <ng-container matColumnDef="id_IR">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header  >registry number</th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header  >Registry number</th>
     <td mat-cell *matCellDef="let element"  > {{element.id_IR}} </td>
   </ng-container>
 
-  <!-- <ng-container matColumnDef="employee_number">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Employee Number </th>
-    <td mat-cell *matCellDef="let element"> {{element.employee_number}} </td>
-  </ng-container> -->
+
 
   <ng-container matColumnDef="employee_name">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Employee Name </th>
@@ -70,11 +63,7 @@
         {{element.employee_name}}
       </span>  </td>
   </ng-container>
-<!-- 
-  <ng-container matColumnDef="CC_number">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> CC Number </th>
-    <td mat-cell *matCellDef="let element"> {{element.CC_number}} </td>
-  </ng-container> -->
+
 
 
   <ng-container matColumnDef="license">
@@ -104,7 +93,6 @@
         element.license_expiration | date: 'dd/MM/yyyy' }}
       
       </span>
-      <!-- {{ element.license_expiration | date: 'dd/MM/yyyy' }} -->
     </td>
   </ng-container>
 
@@ -130,32 +118,11 @@
       </span> 
     </td>
   </ng-container>
-
-  <!-- <ng-container matColumnDef="sub_area_abbreviation">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Sub Area Abbreviation </th>
-    <td mat-cell *matCellDef="let element"> {{element.sub_area_abbreviation}} </td>
-  </ng-container> -->
-  <!-- Sub Area Manager Column -->
   
   <ng-container matColumnDef="sub_area_manager">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Sub Area Manager </th>
     <td mat-cell *matCellDef="let element"> {{element.sub_area_manager}} </td>
   </ng-container>
-
-  <!-- <ng-container matColumnDef="area">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Area  </th>
-    <td mat-cell *matCellDef="let element"> {{element.area}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="area_abbreviation">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Area abbreviation </th>
-    <td mat-cell *matCellDef="let element"> {{element.area_abbreviation}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="area_manager">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>  Area Manager </th>
-    <td mat-cell *matCellDef="let element"> {{element.area_manager}} </td>
-  </ng-container> -->
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

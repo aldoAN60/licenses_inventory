@@ -6,10 +6,8 @@ import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import {Observable} from 'rxjs';
 import { environment as test } from 'src/enviroments/enviroment';
-import { environment as product } from 'src/enviroments/enviroment.prod';
 
 const urlTest = test.apiUrl;
-const urlProd = product.apiUrl;
 @Component({
   selector: 'app-excel',
   templateUrl: './excel.component.html',

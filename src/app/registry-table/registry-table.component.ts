@@ -71,6 +71,7 @@ export class RegistryTableComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
+  registryCounts:any;
   licenseControl = new FormControl('');
   filterControl = new FormControl('');
   uniqueLicenses:any;
@@ -103,6 +104,7 @@ export class RegistryTableComponent implements OnInit {
   dataSource = new MatTableDataSource<PeriodicElement>([]); // Inicializa el dataSource como una instancia de MatTableDataSource
 
   ngOnInit(): void {
+    this.getRegistryCounts();
     this.getRegistry();
     this.filteredOptions = this.licenseControl.valueChanges.pipe(
       startWith(''),
@@ -119,7 +121,21 @@ export class RegistryTableComponent implements OnInit {
     
   }
   
-
+  getRegistryCounts(){
+      
+    const url = urlTest+'/total-Licenses';
+    this.http.get<any>(url).pipe(
+      tap((data)=> {
+        this.registryCounts = data;
+        
+      }),
+      catchError((error:any)=>{
+        console.error(error);
+        return of(null);
+      })
+    ).subscribe();
+      
+  }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();

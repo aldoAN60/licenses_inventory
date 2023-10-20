@@ -19,7 +19,6 @@ import { LoginComponent } from './login/login.component';
     declarations: [
         AppComponent,
         FilterInputComponent,
-        LoginComponent,
         
        
         
@@ -34,7 +33,7 @@ import { LoginComponent } from './login/login.component';
         BrowserAnimationsModule,
         RegistryTableComponent,
         MatSlideToggleModule,
-        MatIconModule
+        MatIconModule,
     ]
 })
 export class AppModule { }

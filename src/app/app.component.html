@@ -1,38 +1,7 @@
 
 <main class="d-flex justify-content-center flex-column">
   <h1 class="h1 fs-1 mb-5 animate__animated animate__fadeInDown">Licenses Inventory </h1>
+  <router-outlet></router-outlet>
   
-  <div class="container mt-4 position-relative animate__animated animate__fadeInUp">
-    <div style="position: relative; top: -60px; left: -23px;">
-      <div class="position-absolute">
-        
-        <svg class="selected" xmlns="http://www.w3.org/2000/svg" width="300" height="60" viewBox="0 0 241 52" >
-          <path d="M0 20C0 8.9543 8.95431 0 20 0H203.429C206.903 0 210.128 1.80252 211.947 4.76128L241 52H0V20Z" />
-          </svg>
-        <p style="position: absolute; top: 1em; left: 1.9em;">
-          <span>
-            <svg class="selected-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40"  class="bi bi-list-task" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5H2zM3 3H2v1h1V3z"/>
-              <path d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9z"/>
-              <path fill-rule="evenodd" d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5V7zM2 7h1v1H2V7zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5H2zm1 .5H2v1h1v-1z"/>
-            </svg>
-          </span>
-          <span class=" ms-1 me-1 text_licenses_select"> Total Licenses </span>
-          <span class="quantity_radius_select" >{{registryCounts?.totalRegistry}}</span>
-          <span>this is a crud</span>
-
-        </p>
-      
-      </div>
-    </div>
-    
-    <div class="row">
-      <div class="col">
-        <div id="table-conteiner">
-          <app-registry-table></app-registry-table>
-        </div>
-      </div>
-    </div>
-  </div>
 </main>
 

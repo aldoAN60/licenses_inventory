@@ -1,3 +1,4 @@
+<h1 class="h1 fs-1 mb-5 animate__animated animate__fadeInDown">Licenses Inventory </h1>
 <div class="container mt-4 position-relative animate__animated animate__fadeInUp">
   <div style="position: relative; top: -60px; left: -23px;">
     <div class="position-absolute">
@@ -75,7 +76,7 @@
           </mat-card>
         
         <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 mt-2 table">
-        
+
           <ng-container matColumnDef="id_IR">
             <th mat-header-cell *matHeaderCellDef mat-sort-header  >Registry number</th>
             <td mat-cell *matCellDef="let element"  > {{element.id_IR}} </td>
@@ -153,7 +154,6 @@
         
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        
         </table>
         <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
         

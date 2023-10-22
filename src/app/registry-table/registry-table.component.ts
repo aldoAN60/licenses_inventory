@@ -18,6 +18,8 @@ import {MatCardModule} from '@angular/material/card';
 import { ExcelComponent } from '../excel/excel.component';
 import { environment as test } from 'src/enviroments/enviroment';
 import { MatIconModule } from '@angular/material/icon';
+import {SelectionModel} from '@angular/cdk/collections';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 const urlTest = test.apiUrl;
 
@@ -63,7 +65,8 @@ export interface PeriodicElement {
     MatCardModule,
     CommonModule,
     ExcelComponent,
-    MatIconModule
+    MatIconModule,
+    MatCheckboxModule,
   ]
 })
 

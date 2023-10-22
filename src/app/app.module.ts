@@ -7,10 +7,10 @@ import { FilterInputComponent } from './filter-input/filter-input.component';
 import { RegistryTableComponent } from './registry-table/registry-table.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { LoginComponent } from './login/login.component';
-
+import { LoaderComponent } from './loader/loader.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 
@@ -19,9 +19,6 @@ import { LoginComponent } from './login/login.component';
     declarations: [
         AppComponent,
         FilterInputComponent,
-        
-       
-        
         
     ],
     providers: [],
@@ -34,6 +31,10 @@ import { LoginComponent } from './login/login.component';
         RegistryTableComponent,
         MatSlideToggleModule,
         MatIconModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatCheckboxModule
+        
     ]
 })
 export class AppModule { }

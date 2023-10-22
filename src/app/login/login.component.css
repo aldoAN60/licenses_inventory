@@ -1,7 +1,32 @@
 .login-conteiner{
-overflow: hidden;
-}
+    background-image: url('/assets/img/DevCar_dark.jpg');
+    background-size: cover; /* Ajusta la imagen al tamaño de la ventana del navegador */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-attachment: fixed; /* Mantiene la imagen fija mientras se desplaza la página */
+    height: 100vh;
+    width: 100vw;
+  }
+  
+
 .img{
     width:100%;
     height: 100%;
+}
+.mat-mdc-card {
+    background: linear-gradient(240deg, rgba(0,28,104,0.3) 0%, rgba(0,69,142,0.3) 100%) !important;
+    /* border: solid 1px  rgba(0,28,104,0.1); */
+    border-radius: 20px;
+    box-shadow: 8px 5px 30px 0px rgba(126, 126, 126, 0.15);
+
+}
+.loading{
+    background-color: rgba(242, 242, 242, 0.212);
+    border-radius: 20px;
+    box-shadow: inset 5px 0px 30px 15px rgba(0, 0, 0, 0.5);
+    
+    
+}
+.blur{
+    filter:blur(2px);
+
 }

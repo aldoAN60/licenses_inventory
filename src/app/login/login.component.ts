@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms'; 
+import { HttpRequestService } from '../services/http/http-request.service';
+import { AutenticationService } from '../services/auth/autentication.service';
+import { LoaderComponent } from '../loader/loader.component';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -18,14 +22,57 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
+    FormsModule,
+    LoaderComponent
   ],
 })
-export class LoginComponent {
-  constructor(private sanitizer: DomSanitizer){}
+export class LoginComponent implements OnInit {
+  username!:string;
+  password!:string;
+  isLoading:boolean = false;
   
-  hide = true;
-  imagenUrl: string = 'assets/img/KeyVisual.jpg';
-  // setImage(url: string){
-  //   this.imagenUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-  // }
+
+hide = true;
+imagenUrl: string = 'assets/img/KeyVisual.jpg';
+  constructor(private authHttpService: HttpRequestService, private router: Router){}
+  ngOnInit(): void {
+
+  }
+  getAuth(){
+    return new Promise<void>((resolve,reject)=>{
+      this.authHttpService.getAuthUser(this.username,this.password).subscribe({
+        next: response =>{
+          const res:any = response
+          localStorage.setItem('authenticated', JSON.stringify(res.authenticated));
+          resolve();
+        },
+        error: error =>{
+          console.error('error ',error);
+          reject();
+        }
+      });
+    });
+  }
+  async submit() {
+    this.isLoading = true;
+    await this.getAuth()
+    .then(() =>{
+      this.isLoading = false;
+      this.router.navigate(['inventory-table']);
+    }).catch(()=>{
+
+      this.isLoading = false;
+      alert('usuario no existe');
+    });
+      }
+    
+  
+  
+  
+  
+  
+  
+  
+
+
 }

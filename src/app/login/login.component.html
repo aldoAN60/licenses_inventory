@@ -1,31 +1,29 @@
-<div class="login-conteiner mx-2">
-    <div class="row justify-content-center">
-        <div class="col-6">
-            <img [src]="imagenUrl" alt="Descripción de la imagen" class="img">
+<div class="login-conteiner d-flex flex-column justify-content-center position-relative">
+    <div class="position-absolute top-30 ms-3 w-50">
+        <mat-card class="d-flex justify-content-center card-background ">
+            <div  class="{{isLoading ? 'animate__animated animate__fadeIn loading w-100 h-100 position-absolute z-3 d-flex justify-content-center align-items-center':'d-none'}} ">
 
-        </div>
-        <div class="col-6   ">
-            <mat-card class="d-flex justify-content-center" style="height: 100%;">
-                <mat-card-content>
-                    <div class="d-flex flex-column justify-content-center align-items-stretch">
-                        <h2 class="text-center d-flex flex-column text-uppercase">
-                            <span class="material-icons md-48">
-                                person
-                            </span>
-                            welcome
-                        </h2>    
-                        <mat-form-field>
-                            <mat-label>Username</mat-label>
-                            <input matInput>
-                        </mat-form-field>
-                        <mat-form-field>
-                            <mat-label>Password</mat-label>
-                            <input matInput [type]="hide ? 'password' : 'text'">
-                        </mat-form-field>
-                        <button mat-raised-button color="primary">Log in</button>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-        </div>
+                <app-loader></app-loader>
+            </div>
+            <mat-card-content  class="{{isLoading ? 'blur':null}}">
+                <div class="d-flex flex-column justify-content-center align-items-stretch">
+                    <h2 class="text-center d-flex flex-column text-uppercase text-light">
+                        <span class="material-icons md-48">
+                            person
+                        </span>
+                        welcome
+                    </h2>    
+                    <mat-form-field>
+                        <mat-label>Username</mat-label>
+                        <input matInput [(ngModel)]="username">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Password</mat-label>
+                        <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="password">
+                    </mat-form-field>
+                    <button mat-raised-button color="primary" (click)="submit()">Log in</button>
+                </div>
+            </mat-card-content>
+        </mat-card>
     </div>
 </div>

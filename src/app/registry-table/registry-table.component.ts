@@ -20,6 +20,9 @@ import { environment as test } from 'src/enviroments/enviroment';
 import { MatIconModule } from '@angular/material/icon';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { DialogComponent } from '../dialog/dialog.component';
 
 const urlTest = test.apiUrl;
 
@@ -67,6 +70,9 @@ export interface PeriodicElement {
     ExcelComponent,
     MatIconModule,
     MatCheckboxModule,
+    MatMenuModule,
+    MatDialogModule
+
   ]
 })
 
@@ -84,9 +90,10 @@ export class RegistryTableComponent implements OnInit {
   
   filteredOptions!: Observable<string[]>;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, public dialog: MatDialog) {}
 
   displayedColumns: string[] = [
+    'select',
     'id_IR',
     //'employee_number',
     'employee_name',
@@ -102,9 +109,19 @@ export class RegistryTableComponent implements OnInit {
     //'area',
     //'area_abbreviation',
     //'area_manager',
+    'actions'
   ];
 
   dataSource = new MatTableDataSource<PeriodicElement>([]); // Inicializa el dataSource como una instancia de MatTableDataSource
+  selection = new SelectionModel<PeriodicElement>(true, []);
+
+  openDialog() {
+    const dialogRef = this.dialog.open(DialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 
   ngOnInit(): void {
     this.getRegistryCounts();
@@ -123,7 +140,37 @@ export class RegistryTableComponent implements OnInit {
     });
     
   }
-  
+  isAllSelected() {
+  const numSelected = this.selection.selected.length;
+  const numRows = this.dataSource.data.length;
+  return numSelected === numRows;
+}
+
+masterToggle() {
+  this.isAllSelected() ?
+    this.selection.clear() :
+    this.dataSource.data.forEach(row => this.selection.select(row));
+    
+}
+
+toggle(row: PeriodicElement) {
+  this.selection.toggle(row);
+}
+showSelected() {
+  const selectedData = this.selection.selected;
+  console.log('Elementos seleccionados:', selectedData);
+}
+
+updateElement(element: PeriodicElement) {
+  // Lógica para actualizar el elemento (por ejemplo, abrir un formulario de edición).
+  console.log('Actualizar elemento:', element);
+}
+
+deleteElement(element: PeriodicElement) {
+  // Lógica para eliminar el elemento (por ejemplo, mostrar un diálogo de confirmación).
+  console.log('Eliminar elemento:', element);
+}
+
   getRegistryCounts(){
       
     const url = urlTest+'/total-Licenses';

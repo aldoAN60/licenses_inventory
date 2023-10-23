@@ -34,13 +34,13 @@ export class LoginComponent implements OnInit {
 
 hide = true;
 imagenUrl: string = 'assets/img/KeyVisual.jpg';
-  constructor(private authHttpService: HttpRequestService, private router: Router){}
+  constructor(private http: HttpRequestService, private router: Router){}
   ngOnInit(): void {
 
   }
   getAuth(){
     return new Promise<void>((resolve,reject)=>{
-      this.authHttpService.getAuthUser(this.username,this.password).subscribe({
+      this.http.getAuthUser(this.username,this.password).subscribe({
         next: response =>{
           const res:any = response
           localStorage.setItem('authenticated', JSON.stringify(res.authenticated));

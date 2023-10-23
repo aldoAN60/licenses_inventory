@@ -9,9 +9,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { LoaderComponent } from './loader/loader.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import { DialogComponent } from './dialog/dialog.component';
 
 
 
@@ -19,6 +18,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     declarations: [
         AppComponent,
         FilterInputComponent,
+        
+        
         
     ],
     providers: [],
@@ -33,7 +34,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         MatIconModule,
         FormsModule,
         ReactiveFormsModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        
         
     ]
 })

@@ -12,4 +12,8 @@ private baseUrl = 'http://localhost:8000/api';
 
     return this.http.get(url);
   }
+  getAreas(){
+    const url = this.baseUrl+'getArea';
+    return this.http.get(url);
+  }
 }

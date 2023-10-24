@@ -23,6 +23,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
+import { SharedVariablesService } from '../services/sharedVriables/shared-variables.service';
 
 const urlTest = test.apiUrl;
 
@@ -90,7 +91,7 @@ export class RegistryTableComponent implements OnInit {
   
   filteredOptions!: Observable<string[]>;
 
-  constructor(private http: HttpClient, public dialog: MatDialog) {}
+  constructor(private http: HttpClient, public dialog: MatDialog, private sharedVariables: SharedVariablesService) {}
 
   displayedColumns: string[] = [
     'select',
@@ -161,14 +162,15 @@ showSelected() {
   console.log('Elementos seleccionados:', selectedData);
 }
 
-updateElement(element: PeriodicElement) {
+updateElement(updateRegistry: PeriodicElement) {
+this.sharedVariables.updateRegistry = updateRegistry;
+this.openDialog();
   // Lógica para actualizar el elemento (por ejemplo, abrir un formulario de edición).
-  console.log('Actualizar elemento:', element);
 }
 
-deleteElement(element: PeriodicElement) {
+deleteElement(deleteRegistry: PeriodicElement) {
   // Lógica para eliminar el elemento (por ejemplo, mostrar un diálogo de confirmación).
-  console.log('Eliminar elemento:', element);
+  console.log('Eliminar elemento:', deleteRegistry);
 }
 
   getRegistryCounts(){

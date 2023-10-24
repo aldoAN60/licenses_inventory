@@ -13,7 +13,19 @@ private baseUrl = 'http://localhost:8000/api';
     return this.http.get(url);
   }
   getAreas(){
-    const url = this.baseUrl+'getArea';
+    const url = this.baseUrl+'/getArea';
+    return this.http.get(url);
+  }
+  getSubAreas(){
+    const url = this.baseUrl+'/getSubArea'
+    return this.http.get(url);
+  }
+  getCostCenter(){
+    const url = this.baseUrl+'/getCostCenter'
+    return this.http.get(url);
+  }
+  getUser(){
+    const url = this.baseUrl+'/usuarios';
     return this.http.get(url);
   }
 }

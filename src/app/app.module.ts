@@ -11,9 +11,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DialogComponent } from './dialog/dialog.component';
-
-
-
+import { CommonModule } from '@angular/common';
+import { MatDialogModule} from '@angular/material/dialog';
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatButtonModule} from '@angular/material/button';
+import { MomentDateModule } from '@angular/material-moment-adapter';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 @NgModule({
     declarations: [
         AppComponent,
@@ -22,7 +28,9 @@ import { DialogComponent } from './dialog/dialog.component';
         
         
     ],
-    providers: [],
+    providers: [ 
+        { provide: MAT_DATE_LOCALE, useValue: 'en-US' }
+    ],
     bootstrap: [AppComponent],
     imports: [
         BrowserModule,
@@ -35,7 +43,10 @@ import { DialogComponent } from './dialog/dialog.component';
         FormsModule,
         ReactiveFormsModule,
         MatCheckboxModule,
-        
+        CommonModule,
+        MomentDateModule,
+        MatDatepickerModule,
+        MatNativeDateModule
         
     ]
 })

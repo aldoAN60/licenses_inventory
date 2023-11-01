@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SharedVariablesService {
-updateRegistry:any;
-  constructor() { }
+updateRegistry:any; //variable que obtiene el registro que se va a actualizar de la tabla y la muestra en el modal de componente dialog
+reloadRequested:boolean = false;
+constructor() { }
 }

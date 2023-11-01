@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import {MatSort, MatSortModule} from '@angular/material/sort';
@@ -24,13 +24,13 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
 import { SharedVariablesService } from '../services/sharedVriables/shared-variables.service';
+import { HttpRequestService } from '../services/http/http-request.service';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 const urlTest = test.apiUrl;
 
-
-
-
-export interface PeriodicElement {
+export interface LicenseRegistry {
   id_IR: string;
   area_manager: string;
   area: string,
@@ -58,7 +58,7 @@ export interface PeriodicElement {
     MatTooltipModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule, 
+    MatSortModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
     FormsModule,
@@ -72,7 +72,8 @@ export interface PeriodicElement {
     MatIconModule,
     MatCheckboxModule,
     MatMenuModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSnackBarModule
 
   ]
 })
@@ -86,12 +87,19 @@ export class RegistryTableComponent implements OnInit {
   filterControl = new FormControl('');
   uniqueLicenses:any;
   options: string[] = [];
-  
-  
-  
+
+
+
   filteredOptions!: Observable<string[]>;
 
-  constructor(private http: HttpClient, public dialog: MatDialog, private sharedVariables: SharedVariablesService) {}
+  constructor(
+    private http: HttpClient,
+    public dialog: MatDialog, 
+    private sharedVariables: SharedVariablesService,
+    private htp:HttpRequestService,
+    private snackBar: MatSnackBar
+    ) {}
+
 
   displayedColumns: string[] = [
     'select',
@@ -113,25 +121,37 @@ export class RegistryTableComponent implements OnInit {
     'actions'
   ];
 
-  dataSource = new MatTableDataSource<PeriodicElement>([]); // Inicializa el dataSource como una instancia de MatTableDataSource
-  selection = new SelectionModel<PeriodicElement>(true, []);
+  dataSource = new MatTableDataSource<LicenseRegistry>([]); // Inicializa el dataSource como una instancia de MatTableDataSource
+  selection = new SelectionModel<LicenseRegistry>(true, []);
 
   openDialog() {
     const dialogRef = this.dialog.open(DialogComponent);
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(async result => {
+
       console.log(`Dialog result: ${result}`);
+
+        await this.getRegistrys();
+        this.showSnackbar();
+     // this.getRegistry(); // Llama a getRegistry después de cerrar el diálogo
+    });
+  }
+  showSnackbar() {
+    this.snackBar.open('Registro actualizado', 'Cerrar', {
+      duration: 3000, // Duración en milisegundos (3 segundos en este caso)
+      horizontalPosition:'right',
+      verticalPosition:'top',
     });
   }
 
   ngOnInit(): void {
     this.getRegistryCounts();
-    this.getRegistry();
+    this.getRegistrys();
     this.filteredOptions = this.licenseControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || '')),
     );
-  
+
     // Suscríbete a los cambios en el filtro y aplícalo a la tabla
     this.filterControl.valueChanges.subscribe(filterValue => {
       this.dataSource.filter = filterValue!.trim().toLowerCase();
@@ -139,8 +159,10 @@ export class RegistryTableComponent implements OnInit {
     this.licenseControl.valueChanges.subscribe(filterValue => {
       this.dataSource.filter = filterValue!.trim().toLocaleLowerCase();
     });
-    
+
   }
+
+
   isAllSelected() {
   const numSelected = this.selection.selected.length;
   const numRows = this.dataSource.data.length;
@@ -151,10 +173,10 @@ masterToggle() {
   this.isAllSelected() ?
     this.selection.clear() :
     this.dataSource.data.forEach(row => this.selection.select(row));
-    
+
 }
 
-toggle(row: PeriodicElement) {
+toggle(row: LicenseRegistry) {
   this.selection.toggle(row);
 }
 showSelected() {
@@ -162,31 +184,32 @@ showSelected() {
   console.log('Elementos seleccionados:', selectedData);
 }
 
-updateElement(updateRegistry: PeriodicElement) {
+updateElement(updateRegistry: LicenseRegistry) {
 this.sharedVariables.updateRegistry = updateRegistry;
 this.openDialog();
+
   // Lógica para actualizar el elemento (por ejemplo, abrir un formulario de edición).
 }
 
-deleteElement(deleteRegistry: PeriodicElement) {
+deleteElement(deleteRegistry: LicenseRegistry) {
   // Lógica para eliminar el elemento (por ejemplo, mostrar un diálogo de confirmación).
   console.log('Eliminar elemento:', deleteRegistry);
 }
 
   getRegistryCounts(){
-      
+
     const url = urlTest+'/total-Licenses';
     this.http.get<any>(url).pipe(
       tap((data)=> {
         this.registryCounts = data;
-        
+
       }),
       catchError((error:any)=>{
         console.error(error);
         return of(null);
       })
     ).subscribe();
-      
+
   }
 
   private _filter(value: string): string[] {
@@ -195,28 +218,51 @@ deleteElement(deleteRegistry: PeriodicElement) {
     return this.options.filter(option => option.toLowerCase().includes(filterValue));
   }
 
-  getRegistry() {
-    const url = urlTest+'/registry';
-    
-    this.http
-      .get<PeriodicElement[]>(url)
-      .pipe(
-        tap((data) => {
-          this.dataSource.data = data; // Asigna los datos al dataSource
+  // getRegistry() {
+  //   const url = urlTest+'/registry';
+
+  //   this.http
+  //     .get<LicenseRegistry[]>(url)
+  //     .pipe(
+  //       tap((data) => {
+  //         console.log('sin async',data);
+  //         this.dataSource.data = data; // Asigna los datos al dataSource
+  //         this.dataSource.paginator = this.paginator; // Configura el paginador
+  //         this.dataSource.sort = this.sort;
+  //         let license: string[] = data.map((element) => {
+  //           return element.license;
+  //         });
+  //         license = [... new Set(license)]
+  //         this.options = license.sort();
+
+  //       }),
+  //       catchError((error: any) => {
+  //         console.error(error);
+  //         return of([]); // En caso de error, asigna un arreglo vacío o maneja el error según tu necesidad.
+  //       })
+  //     )
+  //     .subscribe();
+  // }
+  getRegistrys(){
+    return new Promise<void>((resolve,reject) =>{
+      this.htp.getRegistry().subscribe({
+        next: (response:any) =>{
+          this.dataSource.data = response; // Asigna los datos al dataSource
           this.dataSource.paginator = this.paginator; // Configura el paginador
           this.dataSource.sort = this.sort;
-          let license: string[] = data.map((element) => {
+
+          let license: string[] = response.map((element: { license: any; }) => {
             return element.license;
           });
-          license = [... new Set(license)]
+          license = [... new Set(license)];
           this.options = license.sort();
-          
-        }),
-        catchError((error: any) => {
+          resolve();
+        },
+        error:error =>{
           console.error(error);
-          return of([]); // En caso de error, asigna un arreglo vacío o maneja el error según tu necesidad.
-        })
-      )
-      .subscribe();
+          reject();
+        }
+      });
+    });
   }
 }

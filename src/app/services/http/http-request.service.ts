@@ -12,6 +12,10 @@ private baseUrl = 'http://localhost:8000/api';
 
     return this.http.get(url);
   }
+  getRegistry(){
+    const url = this.baseUrl+'/registry';
+    return this.http.get<[]>(url);
+  }
   getAreas(){
     const url = this.baseUrl+'/getArea';
     return this.http.get(url);
@@ -27,5 +31,9 @@ private baseUrl = 'http://localhost:8000/api';
   getUser(){
     const url = this.baseUrl+'/usuarios';
     return this.http.get(url);
+  }
+  updateRegistry(body:any){
+    const url = this.baseUrl+'/updateRegistry';
+    return this.http.patch(url,body);
   }
 }

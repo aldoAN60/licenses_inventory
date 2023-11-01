@@ -1,12 +1,16 @@
 <h1 mat-dialog-title>Update registry</h1>
-<mat-dialog-content class="mat-typography">
+<div  class="{{isLoading ? 'animate__animated animate__fadeIn loading w-100 h-75 position-absolute z-3 d-flex justify-content-center align-items-center':'d-none'}} ">
+    <app-loader></app-loader>
+</div>
+<mat-dialog-content class="{{isLoading ? 'blur ':'mat-typography'}}">
+
     <div class="container text-center">
         <div class="row">
             <div class="col-4">
                     <!-- area selector -->
                 <mat-form-field>
                     <mat-label>Select an area</mat-label>
-                    <mat-select [formControl]="areaControl">
+                    <mat-select [formControl]="areaControl" required>
                         
                       <mat-option *ngFor="let option of area" [value]="option.area_name">{{ option.area_name }}</mat-option>
                     </mat-select>
@@ -42,17 +46,14 @@
                 <!-- employee number input -->
                 <mat-form-field class="example-full-width">
                     <mat-label>Employee number</mat-label>
-                    <input type="number" matInput [formControl]="employeeNumberControl" placeholder="Employee number">
-                    <mat-error *ngIf="!employeeNumberControl.hasError('required')">
-                        Enter a Employee number
-                    </mat-error>
+                    <input type="text" matInput disabled value={{employeeNumberControl.value}}>
                 </mat-form-field>
             </div>
             <div class="col-4">
                 <!-- employee name input -->
                 <mat-form-field class="example-full-width">
                     <mat-label>Employee name</mat-label>
-                    <input type="text" matInput [formControl]="employeeNameControl" placeholder="Employee name">
+                    <input type="text" matInput [formControl]="employeeNameControl" placeholder="Employee name" required>
                     <mat-error *ngIf="!employeeNameControl.hasError('required')">
                         Enter a employee name
                     </mat-error>
@@ -63,14 +64,11 @@
             <mat-form-field class="example-full-width">
                 <mat-label>Employee email</mat-label>
                 <input type="email" matInput [formControl]="employeeEmailControl" placeholder="Employee email">
-                <mat-error *ngIf="employeeEmailControl.hasError('email') && !employeeEmailControl.hasError('required')">
-                    Enter a employee name
-                </mat-error>
             </mat-form-field>
     </div>
         </div>
         
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-6">
                 <!--license input -->
                 <mat-form-field class="w-100">
@@ -83,10 +81,18 @@
             </div>
             <div class="col-6">
                 <!--lincese status selector -->
-                <mat-form-field class="w-100">
+                <mat-form-field class="w-100 ">
                     <mat-label>license expiration</mat-label>
-                    <input matInput [matDatepicker]="picker" (dateChange)="onDateChange($event)">
-                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <input [value]="licenseExpVal" matInput [matDatepicker]="picker" (dateChange)="onDateChange($event)" disabled="{{lifeTime || unknownExp ? 'true':'false' }}" >
+                    <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                    <mat-hint class="d-flex flex-row justify-content-between fs-6 w-100">
+                        <small class="me-2">
+                            <mat-slide-toggle [(ngModel)]="lifeTime" (toggleChange)="lifeTimeFunc()" >LifeTime Exp</mat-slide-toggle>
+                        </small>
+                        <small class="ms-2">
+                            <mat-slide-toggle [(ngModel)]="unknownExp" (toggleChange)="unknownExpFunc()" >Unkown Exp</mat-slide-toggle>
+                        </small>
+                    </mat-hint>
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
@@ -108,6 +114,7 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="true" color="accent" cdkFocusInitial (click)="updateRegistry()">update</button>
+  <button mat-button  color="accent"  (click)="updateRegistry()" [disabled]="isLoading">update</button>
+  <!-- <button mat-button  color="accent" cdkFocusInitial (click)="updateRegistry()">update</button> -->
 </mat-dialog-actions>
 

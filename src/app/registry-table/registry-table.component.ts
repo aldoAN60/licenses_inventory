@@ -82,15 +82,15 @@ export class RegistryTableComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  registryCounts:any;
+  TotalRegistryCounts:any;
   licenseControl = new FormControl('');
   filterControl = new FormControl('');
   uniqueLicenses:any;
-  options: string[] = [];
+  licenseSelect: string[] = [];
 
 
 
-  filteredOptions!: Observable<string[]>;
+  filteredLicenses!: Observable<string[]>;
 
   constructor(
     private http: HttpClient,
@@ -124,145 +124,178 @@ export class RegistryTableComponent implements OnInit {
   dataSource = new MatTableDataSource<LicenseRegistry>([]); // Inicializa el dataSource como una instancia de MatTableDataSource
   selection = new SelectionModel<LicenseRegistry>(true, []);
 
-  openDialog() {
-    const dialogRef = this.dialog.open(DialogComponent);
+/**
+ * Inicializa el componente y realiza varias acciones al cargar.
+ */
+ngOnInit(): void {
+  // Obtener la cantidad de registros
+  this.getRegistryCounts();
 
-    dialogRef.afterClosed().subscribe(async result => {
+  // Obtener los registros
+  this.getRegistrys();
 
-      console.log(`Dialog result: ${result}`);
+  // Filtrar las licencias en tiempo real
+  this.filteredLicenses = this.licenseControl.valueChanges.pipe(
+    startWith(''),
+    map(value => this._filter(value || '')),
+  );
 
-        await this.getRegistrys();
-        this.showSnackbar();
-     // this.getRegistry(); // Llama a getRegistry después de cerrar el diálogo
-    });
-  }
-  showSnackbar() {
-    this.snackBar.open('Registro actualizado', 'Cerrar', {
-      duration: 3000, // Duración en milisegundos (3 segundos en este caso)
-      horizontalPosition:'right',
-      verticalPosition:'top',
-    });
-  }
+  // Suscribirse a los cambios en el filtro y aplicarlo a la tabla
+  this.filterControl.valueChanges.subscribe(filterValue => {
+    this.dataSource.filter = filterValue!.trim().toLowerCase();
+  });
 
-  ngOnInit(): void {
-    this.getRegistryCounts();
-    this.getRegistrys();
-    this.filteredOptions = this.licenseControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value || '')),
-    );
-
-    // Suscríbete a los cambios en el filtro y aplícalo a la tabla
-    this.filterControl.valueChanges.subscribe(filterValue => {
-      this.dataSource.filter = filterValue!.trim().toLowerCase();
-    });
-    this.licenseControl.valueChanges.subscribe(filterValue => {
-      this.dataSource.filter = filterValue!.trim().toLocaleLowerCase();
-    });
-
-  }
+  // Suscribirse a los cambios en la selección de licencias y aplicarlo a la tabla
+  this.licenseControl.valueChanges.subscribe(filterValue => {
+    this.dataSource.filter = filterValue!.trim().toLocaleLowerCase();
+  });
+}
 
 
-  isAllSelected() {
+/**
+ * Filtra un arreglo de opciones de licencias según el valor de búsqueda proporcionado.
+ * 
+ * @param value - El valor de búsqueda para filtrar las opciones.
+ * @returns Un arreglo de opciones de licencias que coinciden con el valor de búsqueda.
+ */
+private _filter(value: string): string[] {
+  // Convierte el valor de búsqueda a minúsculas para hacer la búsqueda sin distinción de mayúsculas.
+  const filterValue = value.toLowerCase();
+
+  // Filtra las opciones de licencias que incluyen el valor de búsqueda en minúsculas.
+  return this.licenseSelect.filter(option => option.toLowerCase().includes(filterValue));
+}
+
+
+/**
+ * Verifica si todos los elementos de la tabla están seleccionados.
+ * 
+ * @returns `true` si todos los elementos están seleccionados; de lo contrario, `false`.
+ */
+isAllSelected() {
   const numSelected = this.selection.selected.length;
   const numRows = this.dataSource.data.length;
   return numSelected === numRows;
 }
 
+/**
+ * Alternar la selección de todos los elementos.
+ */
 masterToggle() {
   this.isAllSelected() ?
     this.selection.clear() :
     this.dataSource.data.forEach(row => this.selection.select(row));
-
 }
 
+/**
+ * Alternar la selección de un elemento de la tabla.
+ * 
+ * @param row - El elemento de la tabla que se va a alternar.
+ */
 toggle(row: LicenseRegistry) {
   this.selection.toggle(row);
 }
+
+/**
+ * Muestra en la consola los elementos seleccionados.
+ */
 showSelected() {
   const selectedData = this.selection.selected;
   console.log('Elementos seleccionados:', selectedData);
 }
 
-updateElement(updateRegistry: LicenseRegistry) {
-this.sharedVariables.updateRegistry = updateRegistry;
-this.openDialog();
 
-  // Lógica para actualizar el elemento (por ejemplo, abrir un formulario de edición).
+/**
+ * Abre un cuadro de diálogo para actualizar un registro.
+ * @remarks
+ * Si el resultado del cuadro de diálogo no es una cadena vacía, se llama a la función getRegistrys
+ * para actualizar la lista de registros y se muestra un mensaje Snackbar con el mensaje "Registro actualizado".
+ */
+openDialog() {
+  const dialogRef = this.dialog.open(DialogComponent);
+
+  dialogRef.afterClosed().subscribe(async result => {
+    if (result !== '') {
+      await this.getRegistrys();
+      this.showSnackbar();
+    }
+  });
 }
+
+/**
+ * Actualiza la variable compartida `updateRegistry` con el registro que se va a actualizar y luego abre el cuadro de diálogo.
+ * @param updateRegistry - El registro que se va a actualizar.
+ */
+updateElement(updateRegistry: LicenseRegistry) {
+  this.sharedVariables.updateRegistry = updateRegistry;
+  this.openDialog();
+}
+
+/**
+ * Muestra un mensaje Snackbar con el mensaje "Registro actualizado".
+ */
+showSnackbar() {
+  this.snackBar.open('Registro actualizado', 'Cerrar', {
+    duration: 3000, // Duración en milisegundos (3 segundos en este caso)
+    horizontalPosition: 'right',
+    verticalPosition: 'top',
+  });
+}
+
 
 deleteElement(deleteRegistry: LicenseRegistry) {
   // Lógica para eliminar el elemento (por ejemplo, mostrar un diálogo de confirmación).
   console.log('Eliminar elemento:', deleteRegistry);
 }
 
-  getRegistryCounts(){
+/**
+ * Obtiene el número total de registros de licencias y actualiza la propiedad TotalRegistryCounts.
+ */
+getRegistryCounts() {
+  const url = urlTest + '/total-Licenses';
+  this.http.get<any>(url).pipe(
+    tap((data) => {
+      this.TotalRegistryCounts = data;
+    }),
+    catchError((error: any) => {
+      console.error(error);
+      return of(null);
+    })
+  ).subscribe();
+}
 
-    const url = urlTest+'/total-Licenses';
-    this.http.get<any>(url).pipe(
-      tap((data)=> {
-        this.registryCounts = data;
 
-      }),
-      catchError((error:any)=>{
+
+
+/**
+ * Obtiene los registros y los asigna al dataSource de la tabla.
+ * 
+ * @returns Una promesa que se resuelve cuando se obtienen los registros con éxito.
+ * @throws Un error si hay algún problema al obtener los registros.
+ */
+getRegistrys() {
+  return new Promise<void>((resolve, reject) => {
+    this.htp.getRegistry().subscribe({
+      next: (response: any) => {
+        this.dataSource.data = response; // Asigna los datos al dataSource
+        this.dataSource.paginator = this.paginator; // Configura el paginador
+        this.dataSource.sort = this.sort;
+
+        // Obtén la lista de licencias únicas del conjunto de registros
+        let license: string[] = response.map((element: { license: any }) => {
+          return element.license;
+        });
+        license = [...new Set(license)];
+        this.licenseSelect = license.sort();
+
+        resolve();
+      },
+      error: (error: any) => {
         console.error(error);
-        return of(null);
-      })
-    ).subscribe();
-
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
-  }
-
-  // getRegistry() {
-  //   const url = urlTest+'/registry';
-
-  //   this.http
-  //     .get<LicenseRegistry[]>(url)
-  //     .pipe(
-  //       tap((data) => {
-  //         console.log('sin async',data);
-  //         this.dataSource.data = data; // Asigna los datos al dataSource
-  //         this.dataSource.paginator = this.paginator; // Configura el paginador
-  //         this.dataSource.sort = this.sort;
-  //         let license: string[] = data.map((element) => {
-  //           return element.license;
-  //         });
-  //         license = [... new Set(license)]
-  //         this.options = license.sort();
-
-  //       }),
-  //       catchError((error: any) => {
-  //         console.error(error);
-  //         return of([]); // En caso de error, asigna un arreglo vacío o maneja el error según tu necesidad.
-  //       })
-  //     )
-  //     .subscribe();
-  // }
-  getRegistrys(){
-    return new Promise<void>((resolve,reject) =>{
-      this.htp.getRegistry().subscribe({
-        next: (response:any) =>{
-          this.dataSource.data = response; // Asigna los datos al dataSource
-          this.dataSource.paginator = this.paginator; // Configura el paginador
-          this.dataSource.sort = this.sort;
-
-          let license: string[] = response.map((element: { license: any; }) => {
-            return element.license;
-          });
-          license = [... new Set(license)];
-          this.options = license.sort();
-          resolve();
-        },
-        error:error =>{
-          console.error(error);
-          reject();
-        }
-      });
+        reject(error);
+      }
     });
-  }
+  });
+}
+
 }

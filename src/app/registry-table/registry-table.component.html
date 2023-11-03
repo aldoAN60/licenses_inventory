@@ -27,10 +27,16 @@
     <div class="col">
       <div id="table-conteiner">
         <div class="row">
-          <div class="col">
-            <button  mat-raised-button color="primary" class=" mb-2 mt-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-              Advance filter
-            </button>
+          <div class="col-4">
+            <div class=" mb-2 mt-4">
+              <button  mat-raised-button color="primary" class=" me-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                Advance filter
+              </button>
+              <button  mat-raised-button color="secondary" class=" ms-1" type="button" (click)="openCreateDialog()">
+                Add new registry
+              </button>
+            </div>
+            
           </div>
           <div class="col">
             <app-excel ></app-excel> 

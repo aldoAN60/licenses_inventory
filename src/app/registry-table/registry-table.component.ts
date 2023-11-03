@@ -23,6 +23,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
+import { CreateRegistryDialogComponent } from '../create-registry-dialog/create-registry-dialog.component';
 import { SharedVariablesService } from '../services/sharedVriables/shared-variables.service';
 import { HttpRequestService } from '../services/http/http-request.service';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
@@ -219,6 +220,12 @@ openDialog() {
       await this.getRegistrys();
       this.showSnackbar();
     }
+  });
+}
+openCreateDialog(){
+  const dialogRef = this.dialog.open(CreateRegistryDialogComponent);
+  dialogRef.afterClosed().subscribe(async result =>{
+    console.log('result',result);
   });
 }
 

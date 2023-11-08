@@ -216,16 +216,21 @@ openDialog() {
   const dialogRef = this.dialog.open(DialogComponent);
 
   dialogRef.afterClosed().subscribe(async result => {
-    if (result !== '') {
+    if (result !== '' && result != undefined) {
       await this.getRegistrys();
-      this.showSnackbar();
+      this.showSnackbar('Registro actualizado');
     }
   });
 }
 openCreateDialog(){
   const dialogRef = this.dialog.open(CreateRegistryDialogComponent);
   dialogRef.afterClosed().subscribe(async result =>{
-    console.log('result',result);
+
+    if (result !== '' && result !== undefined) {
+      console.log(result);
+      await this.getRegistrys();
+      this.showSnackbar('Registro generado');
+    }
   });
 }
 
@@ -241,8 +246,8 @@ updateElement(updateRegistry: LicenseRegistry) {
 /**
  * Muestra un mensaje Snackbar con el mensaje "Registro actualizado".
  */
-showSnackbar() {
-  this.snackBar.open('Registro actualizado', 'Cerrar', {
+showSnackbar(message:string, ) {
+  this.snackBar.open(message, 'Close', {
     duration: 3000, // Duración en milisegundos (3 segundos en este caso)
     horizontalPosition: 'right',
     verticalPosition: 'top',
@@ -252,7 +257,14 @@ showSnackbar() {
 
 deleteElement(deleteRegistry: LicenseRegistry) {
   // Lógica para eliminar el elemento (por ejemplo, mostrar un diálogo de confirmación).
-  console.log('Eliminar elemento:', deleteRegistry);
+  console.log('Eliminar elemento:', deleteRegistry.id_IR);
+  const response = confirm('Are you sure you want to delete this item?');
+  if(response){
+
+    console.log('elemento eliminado '+ response);
+  }else{
+    console.log('cancelado '+response);
+  }
 }
 
 /**

@@ -1,0 +1,10 @@
+.loading{
+    background-color: rgba(237, 237, 237, 0.313);
+
+    
+    
+}
+.blur{
+    filter:blur(2px);
+
+}

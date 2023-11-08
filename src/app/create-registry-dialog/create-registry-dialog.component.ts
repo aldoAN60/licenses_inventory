@@ -37,6 +37,7 @@ import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 })
 export class CreateRegistryDialogComponent implements OnInit {
 registryValue:any;
+isLoading:boolean = true;
 
 userControl = new FormControl('');
 users:any;
@@ -73,7 +74,7 @@ note:any;
 noteControl =  new FormControl('');
 
 
-constructor(private http:HttpRequestService, private snackBar: MatSnackBar){
+constructor(private http:HttpRequestService, private snackBar: MatSnackBar, public dialogRef: MatDialogRef<CreateRegistryDialogComponent>){
 
 }
 
@@ -82,7 +83,7 @@ constructor(private http:HttpRequestService, private snackBar: MatSnackBar){
   await this.getSubArea();
   await this.getCostCenter();
   await this.getUsers();
-
+  this.isLoading = false;
   this.areaControl.valueChanges.subscribe(selectAreaValue => {
     this.filterSubArea(selectAreaValue);
   });
@@ -177,16 +178,35 @@ filterCostCenter(sub_area_name: string): void {
     };
   }
   
-  createRegistry(){
+  async createRegistry(): Promise<void>{
     if (this.generateRegistryOBJ() == null) {
       this.showSnackbar();
+    }
+    try{
+      await this.httpPostRegistry();
+    }
+    finally{
+      this.dialogRef.close();
     }
     console.log(this.generateRegistryOBJ());
     
     
   }
+  httpPostRegistry():Promise<void>{
+    return new Promise<void>((resolve,reject) => {
+      this.http.createRegistry(this.generateRegistryOBJ()).subscribe({
+        next: () => {
+          resolve(); // Resuelve la promesa cuando la solicitud se completa con éxito.
+        },
+        error:error => {
+          console.error('Error al generar el registro', error);
+          reject(); // Rechaza la promesa en caso de error.
+        }
+      });
+    });
+  }
   showSnackbar() {
-    this.snackBar.open('Algunas variables están vacías', 'Cerrar', {
+    this.snackBar.open('Algunos campos están vacíos', 'Cerrar', {
       duration: 3000, // Duración en milisegundos (3 segundos en este caso)
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
@@ -227,7 +247,6 @@ getArea(): Promise<void> {
     this.http.getAreas().subscribe({
       next: response => {
         this.area = response; // Almacena los datos de áreas en la propiedad "area".
-        console.log(this.area);
         resolve(); // Resuelve la promesa cuando la solicitud es exitosa.
       },
       error: error => {

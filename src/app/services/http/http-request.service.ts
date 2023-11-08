@@ -36,4 +36,8 @@ private baseUrl = 'http://localhost:8000/api';
     const url = this.baseUrl+'/updateRegistry';
     return this.http.patch(url,body);
   }
+  createRegistry(body:any){
+    const url = this.baseUrl+'/postRegistry';
+    return this.http.post(url,body);
+  }
 }

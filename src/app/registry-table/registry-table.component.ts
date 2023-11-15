@@ -139,7 +139,7 @@ removeDisplayedColumns(){
 ngOnInit(): void {
   // Obtener la cantidad de registros
   this.getRegistryCounts();
-  this.auth = Boolean(this.sharedVariables.getauthUser());
+  this.auth = this.sharedVariables.authenticateUSer;
 
   !this.auth ? this.removeDisplayedColumns() : null;
   // Obtener los registros
@@ -220,7 +220,7 @@ toggle(row: LicenseRegistry) {
  */
 showSelected() {
   const selectedData = this.selection.selected;
-  console.log('Elementos seleccionados:', selectedData);
+  // console.log('Elementos seleccionados:', selectedData);
 }
 
 

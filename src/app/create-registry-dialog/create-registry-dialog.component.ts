@@ -110,7 +110,8 @@ constructor(private http:HttpRequestService, private snackBar: MatSnackBar, publ
     this.selectedUserName = event.option.value.employee_name;
     this.selectedUserEmail = event.option.value.email;
     this.selectedUserNumber = Number(event.option.value.employee_number);
-    console.log('Selected User:', this.selectedUserName);
+    // console.log('Selected User:', this.selectedUserName);
+    
     // Puedes realizar acciones adicionales aquí
   }
   /**
@@ -189,7 +190,6 @@ filterCostCenter(sub_area_name: string): void {
       finally{
         this.dialogRef.close();
       }
-      console.log(this.generateRegistryOBJ());
     }
     
     

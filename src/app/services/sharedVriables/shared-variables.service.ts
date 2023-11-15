@@ -8,9 +8,7 @@ updateRegistry:any; //variable que obtiene el registro que se va a actualizar de
 reloadRequested:boolean = false;
 authenticateUSer:boolean = false;
 constructor() { }
-getauthUser():any {
-  return localStorage.getItem('authenticated');
-}
+
 }
 
 

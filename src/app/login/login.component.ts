@@ -9,7 +9,7 @@ import { HttpRequestService } from '../services/http/http-request.service';
 import { AutenticationService } from '../services/auth/autentication.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { Router } from '@angular/router';
-
+import { SharedVariablesService } from '../services/sharedVriables/shared-variables.service';
 
 @Component({
   selector: 'app-login',
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
 
 hide = true;
 imagenUrl: string = 'assets/img/KeyVisual.jpg';
-  constructor(private http: HttpRequestService, private router: Router){}
+  constructor(private http: HttpRequestService, private router: Router, private sharedVariables: SharedVariablesService){}
   ngOnInit(): void {
 
   }
@@ -43,7 +43,7 @@ imagenUrl: string = 'assets/img/KeyVisual.jpg';
       this.http.getAuthUser(this.username,this.password).subscribe({
         next: response =>{
           const res:any = response
-          localStorage.setItem('authenticated', JSON.stringify(res.authenticated));
+          this.sharedVariables.authenticateUSer = res.authenticated;
           resolve();
         },
         error: error =>{
@@ -58,7 +58,12 @@ imagenUrl: string = 'assets/img/KeyVisual.jpg';
     await this.getAuth()
     .then(() =>{
       this.isLoading = false;
-      this.router.navigate(['inventory-table']);
+
+      if(this.sharedVariables.authenticateUSer === true){
+        this.router.navigate(['inventory-table']);
+      }else{
+        alert('usuario no existe');
+      }
     }).catch(()=>{
 
       this.isLoading = false;

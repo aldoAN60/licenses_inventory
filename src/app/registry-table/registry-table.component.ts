@@ -28,6 +28,8 @@ import { SharedVariablesService } from '../services/sharedVriables/shared-variab
 import { HttpRequestService } from '../services/http/http-request.service';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import { Router } from '@angular/router';
 
 const urlTest = test.apiUrl;
 
@@ -74,8 +76,8 @@ export interface LicenseRegistry {
     MatCheckboxModule,
     MatMenuModule,
     MatDialogModule,
-    MatSnackBarModule
-
+    MatSnackBarModule,
+    MatToolbarModule,
   ]
 })
 
@@ -89,6 +91,8 @@ export class RegistryTableComponent implements OnInit {
   uniqueLicenses:any;
   licenseSelect: string[] = [];
 
+  auth:boolean = false;
+
 
 
   filteredLicenses!: Observable<string[]>;
@@ -98,7 +102,8 @@ export class RegistryTableComponent implements OnInit {
     public dialog: MatDialog, 
     private sharedVariables: SharedVariablesService,
     private htp:HttpRequestService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
     ) {}
 
 
@@ -124,14 +129,19 @@ export class RegistryTableComponent implements OnInit {
 
   dataSource = new MatTableDataSource<LicenseRegistry>([]); // Inicializa el dataSource como una instancia de MatTableDataSource
   selection = new SelectionModel<LicenseRegistry>(true, []);
-
+removeDisplayedColumns(){
+  this.displayedColumns.shift();
+  this.displayedColumns.pop();
+}
 /**
  * Inicializa el componente y realiza varias acciones al cargar.
  */
 ngOnInit(): void {
   // Obtener la cantidad de registros
   this.getRegistryCounts();
+  this.auth = Boolean(this.sharedVariables.getauthUser());
 
+  !this.auth ? this.removeDisplayedColumns() : null;
   // Obtener los registros
   this.getRegistrys();
 
@@ -150,6 +160,14 @@ ngOnInit(): void {
   this.licenseControl.valueChanges.subscribe(filterValue => {
     this.dataSource.filter = filterValue!.trim().toLocaleLowerCase();
   });
+}
+loginLogout(){
+if(!this.auth){
+this.router.navigate(['login']);
+}else{
+  localStorage.removeItem('authenticated');
+  window.location.reload();
+}
 }
 
 
@@ -216,18 +234,24 @@ openDialog() {
   const dialogRef = this.dialog.open(DialogComponent);
 
   dialogRef.afterClosed().subscribe(async result => {
-    if (result !== '' && result != undefined) {
+    if (result !== '') {  //result !== '' && result !== undefined
       await this.getRegistrys();
       this.showSnackbar('Registro actualizado');
     }
   });
 }
+
+/**
+ * Abre un cuadro de diálogo para actualizar un registro.
+ * @remarks
+ * Si el resultado del cuadro de diálogo no es una cadena vacía, se llama a la función getRegistrys
+ * para actualizar la lista de registros y se muestra un mensaje Snackbar con el mensaje "Registro actualizado".
+ */
 openCreateDialog(){
   const dialogRef = this.dialog.open(CreateRegistryDialogComponent);
   dialogRef.afterClosed().subscribe(async result =>{
 
-    if (result !== '' && result !== undefined) {
-      console.log(result);
+    if (result !== '') { //result !== '' && result !== undefined
       await this.getRegistrys();
       this.showSnackbar('Registro generado');
     }
@@ -255,16 +279,32 @@ showSnackbar(message:string, ) {
 }
 
 
-deleteElement(deleteRegistry: LicenseRegistry) {
+async deleteElement(deleteRegistry: LicenseRegistry): Promise<void>{
   // Lógica para eliminar el elemento (por ejemplo, mostrar un diálogo de confirmación).
-  console.log('Eliminar elemento:', deleteRegistry.id_IR);
+
   const response = confirm('Are you sure you want to delete this item?');
   if(response){
-
-    console.log('elemento eliminado '+ response);
-  }else{
-    console.log('cancelado '+response);
+    try {
+      await this.httpDeleteRegistry(deleteRegistry.id_IR);
+    }finally{
+      await this.getRegistrys();
+      this.showSnackbar('elemento eliminado correctamente');
+    }
+    
   }
+}
+httpDeleteRegistry(id_IR:any): Promise<void>{
+  return new Promise<void>((reject,resolve) =>{
+    this.htp.deleteRegistry(id_IR).subscribe({
+      next: () => {
+        resolve();
+      },
+      error:error =>{
+        console.error('error', error);
+        reject();
+      }
+    });
+  });
 }
 
 /**

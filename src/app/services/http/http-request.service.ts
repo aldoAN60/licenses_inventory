@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment as test } from 'src/enviroments/enviroment';
 @Injectable({
   providedIn: 'root'
 })
 export class HttpRequestService {
-private baseUrl = 'http://localhost:8000/api';
+private baseUrl = test.apiUrl;
+
   constructor(private http: HttpClient) { }
 
   getAuthUser(username:string, password:string){
@@ -39,5 +41,9 @@ private baseUrl = 'http://localhost:8000/api';
   createRegistry(body:any){
     const url = this.baseUrl+'/postRegistry';
     return this.http.post(url,body);
+  }
+  deleteRegistry(id_IR:any){
+    const url = this.baseUrl+'/deleteRegistry/'+id_IR;
+    return this.http.delete(url);
   }
 }

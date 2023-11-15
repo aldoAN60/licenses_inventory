@@ -217,6 +217,7 @@ unknownExpFunc(): void {
  */
 httpRegistryUpdate(): Promise<void> {
   return new Promise<void>((resolve, reject) => {
+    
       this.http.updateRegistry(this.generateRegistryOBJ()).subscribe({
           next: () => {
               resolve(); // Resuelve la promesa cuando la solicitud se completa con éxito.
@@ -237,6 +238,7 @@ async updateRegistry(): Promise<void> {
   this.isLoading = true; // Activa el indicador de carga.
   try {
       await this.httpRegistryUpdate(); // Espera a que se complete la actualización.
+      
   } finally {
       this.isLoading = false; // Desactiva el indicador de carga.
       this.dialogRef.close(); // Cierra el diálogo de edición.

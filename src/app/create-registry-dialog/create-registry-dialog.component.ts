@@ -181,14 +181,16 @@ filterCostCenter(sub_area_name: string): void {
   async createRegistry(): Promise<void>{
     if (this.generateRegistryOBJ() == null) {
       this.showSnackbar();
+      
+    }else{
+      try{
+        await this.httpPostRegistry();
+      }
+      finally{
+        this.dialogRef.close();
+      }
+      console.log(this.generateRegistryOBJ());
     }
-    try{
-      await this.httpPostRegistry();
-    }
-    finally{
-      this.dialogRef.close();
-    }
-    console.log(this.generateRegistryOBJ());
     
     
   }
